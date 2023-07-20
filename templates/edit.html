@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous">     
+</script>
+<title>Flask_V1</title>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg bg-light">
+<div class = "container-fluid" style="background-color: #e3f2fd;">
+  
+  <a class="navbar-brand" href="{{url_for('getData1')}}">Welcome</a>
+
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+  <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" aria-current="page" href="{{url_for('getData1')}}">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active" href="{{url_for('admin')}}"><b>Edit</b></a>
+      </li>
+      {%if role == 'Admin'%}
+      <li class="nav-item">
+        <a class="nav-link" href="{{url_for('admin')}}">All User</a>
+      </li>
+      {%endif%}
+    </ul>
+  </div>
+
+  <div class="col-sm" align = "Right">
+    <h7><b>Hi {{name}}</b></h7>
+    <a href="{{ url_for('logout') }}"><button class="btn btn-primary">LogOut</button></a>
+  </div>
+</div>
+</nav>
+
+<hr class="border border-danger border-2 opacity-50">
+<hr class="border border-primary border-3 opacity-75">
+<hr>
+
+{%if msg != ''%}
+<h4 align = "center" style="color: Green;">{{msg}}</h4>
+{%else%}
+<h4 align = "center">Your Detials</h4>
+{%endif%}
+<hr>
+<div class="container">
+<form action="{{ url_for('edit') }}" method="post" id = "update">
+<div class="row">
+    
+<br><div class="col">
+    <label for="first_name" class="form-label">First Name</label>
+    <input  type="text" class="form-control" disabled required name="first_name" id = 'fn' value = {{user[1]}} aria-describedby="First Name">
+</div>
+
+<div class="col">
+    <label for="last_name" class="form-label">Last Name</label>
+    <input type="text" class="form-control" disabled required name="last_name" id = 'ln' value = {{user[2]}} aria-describedby="Last Name">
+</div><br>
+    
+
+<div class="col">
+    <label for="age" class="form-label">Date of Birth</label>
+    <input type="date" class="form-control" name="dob" required disabled  max="2014-05-20" id = 'dob' value = {{user[3]}} aria-describedby="DOB">
+</div><br>
+<h1></h1>
+<div class="row">
+    <div class="col">
+        <div class="form-floating">
+            <select class="form-select" name="state" id = "state" disabled>
+            <!--<option selected value = "{{user[6]}}">{{user[6]}}</option>-->
+            </select>
+            <label for="state">State</label>
+        </div>
+        </div><br>
+
+    <div class="col">
+        <div class="form-floating">
+            <select class="form-select" name="district" id = "district" disabled >
+            <option selected value = "{{user[7]}}">{{user[7]}}</option>
+            </select>
+            <label for="district">District</label>
+        </div>
+        </div> 
+</div>  
+<h1></h1>
+<div class="row">
+<div class="col">
+<label for="email" class="form-label">Email address</label>
+<input style = 'color: green;'type="email" class="form-control-plaintext" name="email" readonly value="{{user[4]}}" aria-describedby="emailHelp">
+</div><br>
+
+<div class="col">
+<label for="password" class="form-label">Set New Password</label>
+<input type="password" class="form-control" disabled required name = "password" id = 'pass' value="{{user[5]}}">
+</div>
+<div class="col">
+<br>
+<button type="button" disabled class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id = 'up'>Update</button>
+<!--<button type="submit" disabled class="btn btn-warning" name = "update" id = 'up' value="{{user[0]}}">Update</button>-->
+</div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Are You Sure, You want to Update!</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>E-Mail ID</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{user[1]}}</td>
+              <td>{{user[2]}}</td>
+              <td>{{user[4]}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-warning" name = "update" value="{{user[0]}}">Yes, Update</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</form>
+</div>
+<button type="button" class="btn btn-warning" onclick="update()" id = "edit">Edit your Details</button>
+
+
+
+<script>
+    var dis = JSON.parse('{{dis | tojson}}');
+    var s = JSON.parse('{{user[6] | tojson}}');
+    var d = JSON.parse('{{user[7] | tojson}}');
+    window.onload = function(){
+      var state = document.getElementById("state");
+      var district = document.getElementById("district");
+      for (var x in dis){
+        if (x !== s){
+        state.options[state.options.length] = new Option(x,x)
+      }
+      else{
+      state.options[state.options.length] = new Option(x,x,true,true)
+    }
+    }
+      state.onmouseout = function(){
+        district.length = 0
+        for (var y in dis[state.value]){
+          if (dis[state.value][y] !== d){
+          district.options[district.options.length] = new Option(dis[state.value][y],dis[state.value][y]);
+        }else{
+          district.options[district.options.length] = new Option(dis[state.value][y],dis[state.value][y],true,true);
+        }
+      }
+          }
+    }
+    
+    function update(){
+        document.getElementById("fn").removeAttribute("disabled");
+        document.getElementById("ln").removeAttribute("disabled");
+        document.getElementById("dob").removeAttribute("disabled");
+        document.getElementById("pass").removeAttribute("disabled");
+        document.getElementById("state").removeAttribute("disabled");
+        document.getElementById("district").removeAttribute("disabled");
+        document.getElementById("up").removeAttribute("disabled");
+        document.getElementById("edit").setAttribute("disabled",null)
+    }
+
+    document.getElementById("update").addEventListener("keyup",function(){
+    var fn = document.getElementById('fn').value;
+    var ln = document.getElementById('ln').value;
+    var dob = document.getElementById('dob').value;
+    var state = document.getElementById('state').value;
+    var district = document.getElementById('district').value;
+    var pass = document.getElementById('pass').value;
+    if (fn.trim() !== '' && ln.trim() !== '' && dob !== '' && state != '' && district != '' && pass.trim() != '' && pass.length > 8 && pass.length < 20){
+        document.getElementById('up').removeAttribute("disabled");
+    }
+    else{
+        document.getElementById('up').setAttribute("disabled",null);
+        
+    }
+    });
+
+
+    </script>
+  
+
+</body>
+</html>

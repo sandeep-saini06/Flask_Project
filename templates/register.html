@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous">     
+    </script>
+    <title>Flask_V1</title>
+</head>
+<body>
+  
+  <nav class="navbar bg-light">
+  <div class = "container-fluid" style="background-color: #e3f2fd;">
+
+      <div  class="col-sm" align = "Left">
+      <h2>Welcome to Flask_V1!</h2>
+    </div>
+
+    <div class="col-sm" align = "Right">
+        <a href="{{url_for('login')}}"><button  class="btn btn-primary">LogIn</button></a>
+    </div>
+    </div>
+  </div>
+  </nav>
+<hr>
+
+<div class="container">
+<form action="{{ url_for('register') }}" method="post" id = "register">
+<div class="row">    
+    <div class="col">
+        <label for="first_name" class="form-label">First Name*</label>
+        <input type="text" class="form-control" required name="first_name" id = "fn" aria-describedby="First Name">
+    </div><br>
+    
+    <div class="col">
+      <label for="last_name" class="form-label">Last Name*</label>
+      <input type="text" class="form-control" required name="last_name" id = "ln" aria-describedby="Last Name">
+    </div><br>
+</div><br>
+
+<div class="row">
+    <div class="col">
+      <label for="age" class="form-label">Date of Birth*</label>
+      <input type="date" class="form-control" required name="dob" id = "dob" max="2014-05-20" aria-describedby="DOB">
+    </div><br>
+
+    <div class="col">
+      <label for="email" class="form-label">Email address*</label>
+      <input type="email" class="form-control" required name="email" id = 'em' aria-describedby="emailHelp">
+      <div class="form-text">We'll never share your email with anyone else.</div>
+    </div><br>
+</div><br>
+
+<div class="row">
+  <div class="col">
+    <div class="form-floating">
+      <select class="form-select" name="state" id = "state" required>
+        <option selected value = ''>Select State</option>
+      </select>
+      <label for="state">State*</label>
+    </div>
+  </div><br>
+
+    <div class="col">
+      <div class="form-floating">
+        <select class="form-select" name="district" id = "district" required>
+          <option selected value = ''>Select District</option>
+        </select>
+        <label for="district">District*</label>
+      </div>
+    </div>  
+  </div><br>
+
+    <div class="form-group col-md-6">
+      <label for="password" class="form-label">Password*</label>
+      <input type="password" class="form-control" required name = "password" id = "pass">
+    </div>
+    
+    <div class="col-auto">
+    <span id="passwordHelpInline" class="form-text">
+      Must be 8-20 characters long.
+    </span>
+    </div><br>
+    
+    <button type="submit" class="btn btn-success" disabled id = "btn">Register</button>
+  </div>  
+  </form>
+</div> 
+
+<script> 
+// Takes state:districts in dis variable and set values in Options for the dropdown of state and district
+var dis = JSON.parse('{{dis | tojson}}');
+window.onload = function(){
+  var state = document.getElementById("state");
+  var district = document.getElementById("district");
+  for (var x in dis){
+    state.options[state.options.length] = new Option(x,x)
+  }
+  state.onchange = function(){
+    district.length = 1
+    for (var y in dis[state.value]){
+      district.options[district.options.length] = new Option(dis[state.value][y],dis[state.value][y]);
+    }
+      }
+}//END
+
+//Making Register button disable until all input are fill
+document.getElementById("register").addEventListener("mouseover" || "mouseup",function(){
+  var fn = document.getElementById('fn').value;
+  var ln = document.getElementById('ln').value;
+  var dob = document.getElementById('dob').value;
+  var em = document.getElementById('em').value;
+  var state = document.getElementById('state').value;
+  var district = document.getElementById('district').value;
+  var pass = document.getElementById('pass').value;
+  if (fn.trim() !== '' && ln.trim() !== '' && dob !== '' && em.trim() !== '' && state != '' && district != '' && pass.trim() != '' && pass.length > 8 && pass.length < 20){
+    document.getElementById('btn').removeAttribute("disabled");
+  }
+  else{
+    document.getElementById('btn').setAttribute("disabled",null);
+  }
+});
+
+</script>
+
+<div align = "center">
+    {%if msg %}
+    <h5 style="color: Red;">{{msg}}</h5>
+    {%endif%}
+</div>
+
+</body>
+</html>

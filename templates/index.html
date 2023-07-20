@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <link rel="stylesheet" href = "https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href = "https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous">     
+    </script>
+    <title>Flask_V1</title>
+</head>
+<body>
+  
+  <nav class="navbar navbar-expand-lg bg-light">
+    <div class = "container-fluid" style="background-color: #e3f2fd;">
+      
+      <a class="navbar-brand" href="{{url_for('getData1')}}">Welcome</a>
+    
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+      </button>
+    
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{{url_for('getData1')}}"><b>Home</b></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('edit')}}">Edit</a>
+          </li>
+          {%if role == 'Admin'%}
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('admin')}}">All User</a>
+          </li>
+          {%endif%}
+        </ul>
+      </div>
+
+      <div class="col-sm" align = "Right">
+        <h7><b>Hi {{name}}</b></h7>
+        <a href="{{ url_for('logout') }}"><button class="btn btn-primary">LogOut</button></a>
+      </div>
+  </div>
+</nav>
+
+<hr>
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active" aria-current="page" id = "data1-tab" data-bs-toggle="tab" data-bs-target="#data1" type="button" role="tab" aria-controls="data1" aria-selected="true">Data1</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id = "data2-tab" data-bs-toggle="tab" data-bs-target="#data2" type="button" role="tab" aria-controls="data2" aria-selected="false">Data2</button>
+  </li>
+</ul>
+
+<hr class="border border-danger border-2 opacity-50">
+<hr class="border border-primary border-3 opacity-75">
+<hr>
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade show active" id="data1" role="tabpanel" aria-labelledby="data1-tab">
+    <table id="table1" class="table table-striped table-hover">
+        <thead>
+          <tr align="center">
+            <th>S.No.</th>
+            {%for i in data1[0].keys()%}
+            <th scope="col" >{{i | capitalize}}</th>
+            {%endfor%}
+          </tr>
+        </thead>
+        <tbody>
+        {%for i in data1%}
+          <tr align="center">
+            <th scope="row">{{loop.index}}</th>
+            {%for j in i.values()%}
+            <td>{{j}}</td>
+            {%endfor%}
+          </tr>
+        {%endfor%}
+        </tbody>
+      </table>
+    </div>  
+  </div>      
+
+
+  <div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade" id="data2" role="tabpanel" aria-labelledby="data2-tab">
+      <table id="table2" class="table table-striped table-hover">
+          <thead>
+            <tr align="center">
+              <th>S.No.</th>
+              {%for i in data2[0].keys()%}
+              <th scope="col" >{{i | capitalize}}</th>
+              {%endfor%}
+            </tr>
+          </thead>
+          <tbody>
+          {%for i in data2%}
+            <tr align="center">
+              <th scope="row">{{loop.index}}</th>
+              {%for j in i.values()%}
+              <td>{{j}}</td>
+              {%endfor%}
+            </tr>
+          {%endfor%}
+          </tbody>
+        </table>   
+      <hr>
+      <div align = "center">
+        <h2 style="background-color: Black;color: aliceblue;">About Data</h2><hr>
+        {%for i,j in source.items()%}
+        <h4>{{i | capitalize}}:</h4>
+        <h6>{{j}}</h6>
+        {%endfor%}
+      </div>
+    </div>  
+  </div> 
+  
+  
+        <div id="myModal" class="modal fade">
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h4 class="modal-title">Hi {{name}}</h4>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                      <h5>Welcome to Flask_V1!</h5>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <script src = "https://code.jquery.com/jquery-3.5.1.js"></script>
+      <script src = "https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+      <script src = "https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
+      <script>
+        $(document).ready(function () {
+        $('#table1').DataTable();
+        $('#table2').DataTable();
+        $("#myModal").modal('show');
+        });
+      </script>
+        
+    </body>
+</html>
